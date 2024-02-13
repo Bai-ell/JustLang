@@ -41,14 +41,14 @@ class PostListCreateView(generics.ListCreateAPIView):
     
     @action(['POST', 'DELETE', 'GET'], detail=True)
     def favorite(self, request, slug):  
-        post = get_object_or_404(Post, slug=slug)
+        post = Post.objects.filter(slug=slug)
         user = request.user
 
         if request.method == 'POST':
             if user.favorites.filter(post=post).exists():
                 return Response('This post is already added to favorites!', status=400)
             Favorite.objects.create(owner=user, post=post)
-            return Response('Added to favorites', status=201)
+            return Response('Added to favorites', status=200)
 
         elif request.method == 'DELETE':
             favorite = user.favorites.filter(post=post)

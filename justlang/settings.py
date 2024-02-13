@@ -49,8 +49,9 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt.token_blacklist',
     'twilio',
     'django_celery_results',
-    # 'drf_api_logger',
+    'rest_framework_api_logger',
     'cachalot',
+    'corsheaders',
     # Apps
     'account',
     'category',
@@ -65,6 +66,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rest_framework_api_logger.middleware.APIRequestLoggingMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'justlang.urls'
@@ -263,6 +266,28 @@ LOGGING = {
         },
     },
 }
+
+API_LOGGER = {
+    'ACTIVE': True,  
+    'LOGGER_NAME': 'rest_framework_api_logger',
+    'LOG_REQUESTS': True,
+    'LOG_RESPONSES': True,
+    'LOG_LEVEL': 'DEBUG',  
+}
+
+CORS_ALLOWED_ORIGINS = [
+    "http://example.com",
+    "https://example.com",
+    # Добавьте здесь все разрешенные источники (origins), с которых вы хотите разрешить запросы.
+]
+
+# Другие опции CORS (по умолчанию они выставлены в True):
+# CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_HEADERS = ['accept', 'accept-encoding', 'authorization', 'content-type', 'dnt', 'origin', 'user-agent', 'x-csrftoken', 'x-requested-with']
+# CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
+# CORS_EXPOSE_HEADERS = []
+# CORS_PREFLIGHT_MAX_AGE = 86400
+# CORS_ALLOW_ALL_ORIGINS = False
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
