@@ -16,7 +16,8 @@ from .send_email import send_confirmation_email
 User = get_user_model()
 
 class ActivationView(GenericAPIView):
-    serializer_class = ActivationSerializer
+    serializer_class = ActivationSerializer()
+
 
     def get(self, request):
         code = request.GET.get('u')
@@ -62,7 +63,9 @@ class RegistrationView(APIView):
                 try:
                     send_confirmation_email(user.email, user.activation_code)
                 except:
+
                  return Response({"message": "Зарегистрировался, но на почту код не отправился.",
+
                                     'data': serializer.data}, status=200)
             return Response({'message': 'User registered successfully'})
         else:

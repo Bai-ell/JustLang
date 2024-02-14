@@ -1,9 +1,12 @@
+
 from django.shortcuts import render, get_object_or_404
+
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 from .permissions import IsAuthor, IsAuthorOrAdmin
 from rest_framework import generics, permissions
 from rest_framework.decorators import action
+
 import logging
 
 from category.models import LanguageCategory, PriceCategory
@@ -11,6 +14,7 @@ from .models import Post, Favorite
 from .serializers import PostListSerializer, PostCreateSerializer, PostDetailSerializer, FavoriteSerializer, ReviewSerializer, ReviewActionSerializer, RatingSerializer
 
 logger = logging.getLogger(__name__)
+
 
 class StandartPagination(PageNumberPagination):
     page_size = 10
@@ -40,9 +44,11 @@ class PostListCreateView(generics.ListCreateAPIView):
         return PostListSerializer
     
     @action(['POST', 'DELETE', 'GET'], detail=True)
+
     def favorite(self, request, slug):  
         post = get_object_or_404(Post, slug=slug)
         user = request.user
+
 
         if request.method == 'POST':
             if user.favorites.filter(post=post).exists():
@@ -50,12 +56,15 @@ class PostListCreateView(generics.ListCreateAPIView):
             Favorite.objects.create(owner=user, post=post)
             return Response('Added to favorites', status=201)
 
+
+
         elif request.method == 'DELETE':
             favorite = user.favorites.filter(post=post)
             if favorite.exists():
                 favorite.delete()
                 return Response('Post successfully removed from favorites!')
             return Response('This post is not in favorites!', status=400)
+
 
         elif request.method == 'GET':
             favorites = user.favorites.all()
@@ -71,10 +80,12 @@ class PostListCreateView(generics.ListCreateAPIView):
         user = request.user
         if request.method == 'POST':
             serializer = ReviewActionSerializer(data=request.data, context={'post': post.id, 'owner': user})
+
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=200)
         elif request.method == 'DELETE':
+
             review_slug = self.request.query_params.get('slug')
             review = post.reviews.filter(slug=review_slug)
             if review.exists():
@@ -116,6 +127,7 @@ class PostListCreateView(generics.ListCreateAPIView):
             logger.critical(f'Delete request for ratings of product {slug} by user {user}')
             return Response('Вы успешно удалили оценку!', status=204)
         
+
 class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     lookup_field = 'slug'
@@ -125,7 +137,10 @@ class PostDetailView(generics.RetrieveUpdateDestroyAPIView):
             return (IsAuthorOrAdmin(),)
         elif self.request.method in ['PUT', 'PATCH']:
             return (IsAuthor(),)
+
         return [permissions.AllowAny()]
+
+
     
     def get_serializer_class(self):
         if self.request.method in ['PUT', 'PATCH']:

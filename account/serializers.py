@@ -39,14 +39,17 @@ class ActivationSerializer(serializers.Serializer):
         self.code = attrs['code']
         return attrs
 
-    def save(self, *args, **kwargs):
+    def save(self, **kwargs):
+
         try:
             user = User.objects.get(activation_code=self.code)
             user.is_active = True
             user.activation_code = ''
             user.save()
         except:
-            raise serializers.ValidationError('Неверный код!')
+
+            raise serializers.ValidationError('неверный код')
+
 
 
 class UserSerializer(serializers.ModelSerializer):

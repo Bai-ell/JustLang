@@ -14,7 +14,8 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from decouple import config
-from django.conf import settings
+import stripe 
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -55,6 +56,8 @@ INSTALLED_APPS = [
     'account',
     'category',
     'teachers',
+    'pay',
+
 ]
 
 MIDDLEWARE = [
@@ -92,13 +95,15 @@ WSGI_APPLICATION = 'justlang.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": 'justlang',
-        "USER": 'den',
-        "PASSWORD": 1,
-        "HOST": '127.0.0.1',
-        "PORT": "5432",
+
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('NAME'),
+        'USER':config('USER'),
+        'PASSWORD':config('PASSWORD'),
+        'HOST':config('HOST'),
+        'POTR':'5432'
+
     }
 }
 
@@ -164,6 +169,15 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+
+
+#stripe settings
+
+STRIPE_PUBLISH_KEY = config('STRIPE_PUBLISH_KEY')
+STRIPE_SECRET_KEY = config('STRIPE_SECRET_KEY')
+STRIPE_API_VERSION = config('STRIPE_API_VERSION')
+
 
 # Redis settings
 

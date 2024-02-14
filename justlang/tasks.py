@@ -13,6 +13,7 @@ def send_confirmation_password_task(email, code):
     send_confirmation_password(email, code)
 
 
+
 @app.task()
 # def sender_order_notification_task(user_email, order_id):
 #     sender_order_notification(user_email, order_id)

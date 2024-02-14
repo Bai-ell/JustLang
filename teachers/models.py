@@ -10,9 +10,11 @@ User = get_user_model()
 
 class Post(models.Model):
     owner = models.ForeignKey(User, related_name = 'posts', on_delete = models.CASCADE)
+
     name = models.CharField(max_length=255, verbose_name='Заголовок')
     description = models.TextField(verbose_name='Описание')
     price = models.DecimalField("Цена", max_digits=7, decimal_places=2, default=0, null=False)
+
     language_category = models.ForeignKey(LanguageCategory, on_delete=models.CASCADE, related_name='teachers', verbose_name='Категория по языку')
     price_category = models.ForeignKey(PriceCategory, on_delete=models.CASCADE, related_name='teachers', verbose_name='Категория по цене')
     preview = models.ImageField(upload_to='avatars/', null=True, blank=True, verbose_name='Аватар')
@@ -23,17 +25,21 @@ class Post(models.Model):
     
     def save(self, *args, **kwargs):
         if not self.slug:
+
             self.slug = slugify(self.name)
         super(Post, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Учитель'
         verbose_name_plural = 'Учителя'
+
         ordering = ['created_at']
 
 
     def __str__(self):
+
         return self.name
+
     
 class PostImages(models.Model):
     title = models.CharField(max_length = 100, blank = True)

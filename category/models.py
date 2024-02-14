@@ -1,10 +1,10 @@
 from django.db import models
 from django.utils.text import slugify
-# from teachers.models import Post
+
 
 class LanguageCategory(models.Model):
     name = models.CharField(max_length=100)
-    # post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
+
     parent = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='children')
     slug = models.SlugField("URL", unique=True, max_length=150, null=True, blank=True)
 
@@ -24,8 +24,12 @@ class LanguageCategory(models.Model):
 class PriceCategory(models.Model):
     price_range = models.CharField(max_length=50, unique=True)
     slug = models.SlugField("URL", unique=True, max_length=150, null=True, blank=True)
+
     # post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, blank=True, related_name='posts')
     
+
+
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.price_range)

@@ -4,8 +4,10 @@ from .models import PriceCategory, LanguageCategory
 # Register your models here.
 @admin.register(LanguageCategory)
 class LanguageCategoryAdmin(admin.ModelAdmin):
-    list_display = ("name", "parent", "slug", "id")
-    ordering = ("id",)
+
+
+    list_display = ("name", "parent", "slug")
+    ordering = ("name",)
 
     def get_prepopulated_fields(self, request, obj=None):
         return {

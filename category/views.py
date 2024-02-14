@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
+
 from teachers.models import Post
 from .permissions import IsAdminUserOrReadOnly
 from .models import LanguageCategory, PriceCategory
@@ -17,6 +18,7 @@ class LanguageCategoryAPIView(APIView):
     def get(self, request, slug=None):
         if slug:
             category = get_object_or_404(LanguageCategory, slug=slug)
+
             posts = Post.objects.filter(language_category=category)
             serializer = PostListSerializer(posts, many=True, context={'request': request})
             return Response(serializer.data)
@@ -27,7 +29,7 @@ class LanguageCategoryAPIView(APIView):
                 return Response(serializer.data)
             else:
                 return Response({"message": "Список категорий пуст."}, status=404)
-        
+
     def post(self, request):
         serializer = LanguageCategorySerializer(data = request.data)
         if serializer.is_valid(raise_exception=True):
