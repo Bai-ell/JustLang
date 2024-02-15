@@ -260,23 +260,40 @@ SIMPLE_JWT = {
 
 # Logger settings
 LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
+    "version": 1,
+    "disable_existing_loggers": False,
+
+    "formatters": {
+        "main_format": {
+            "format": "[{asctime}-{levelname}] {module}-{filename}: {message}",
+            "style": "{",
+        }
+    },
+
     'handlers': {
+        'console': {'class': 'logging.StreamHandler',
+                    'formatter': 'main_format'},
         'file': {
-            'level': 'DEBUG',
             'class': 'logging.FileHandler',
-            'filename': 'django.log',
-        },
+            'formatter': 'main_format',
+            'filename': '/Users/baielmangmail.com/all_python/python/python_curses/justlnag/www/justlang/djnago.log',
+        }
     },
+
     'loggers': {
-        'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG'
         },
-    },
+        'product': {
+            'handlers': ['file'],
+            'level': 'WARNING'
+        }
+    }
 }
+
+
+DRF_API_LOGGER_DATABASE = True
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {

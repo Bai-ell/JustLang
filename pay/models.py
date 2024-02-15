@@ -10,7 +10,7 @@ class PayedAddress(models.Model):
     street_address = models.CharField(max_length=100)
     apartment_address = models.CharField(max_length=100)
     country = models.CharField(max_length=100, blank=True, null=True)
-    zip_code = models.CharField(max_length=100, blank=True, null=True)
+    zip = models.CharField(max_length=100, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     price = models.ForeignKey(Post, on_delete=models.CASCADE, null=False)
     

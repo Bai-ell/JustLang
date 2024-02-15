@@ -11,26 +11,26 @@ from rest_framework import permissions
 from justlang.tasks import send_confirmation_email_task, send_confirmation_password_task
 from drf_yasg.utils import swagger_auto_schema
 from .send_email import send_confirmation_email
+from rest_framework import generics
 
 
 User = get_user_model()
 
 class ActivationView(GenericAPIView):
-    serializer_class = ActivationSerializer()
-
+    serializer_class = ActivationSerializer
 
     def get(self, request):
         code = request.GET.get('u')
-        user = get_object_or_404(User, activation_code = code)
+        user = get_object_or_404(User, activation_code=code)
         user.is_active = True
         user.save()
-        return Response('Успешно активирован', status=200)
+        return Response({'message': 'Activation successful'})
     
     def post(self, request):
-        serializer = self.get_serializer(data = request.data)
-        serializer.is_valid(raise_exception = True)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response('Успешно активирован!', status=200)
+        return Response({'message': 'Activation successful'})
     
 class   LoginView(TokenObtainPairView):
     permission_classes = (permissions.AllowAny,)
